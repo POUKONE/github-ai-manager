@@ -1,0 +1,14 @@
+# Configuration locale et secrets
+backend/.env
+.env
+
+# Cache Python
+__pycache__/
+*.pyc
+backend/__pycache__/
+backend/app/__pycache__/
+backend/app/core/__pycache__/
+backend/app/agents/__pycache__/
+
+# Dossier système Mac
+.DS_Store
