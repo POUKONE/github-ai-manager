@@ -17,9 +17,8 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Installer Python 3.11 (stable pour les packages)
+    # 2. Installer Python 3.11
     - name: Set up Python
-      uses: actions/configure-pages@v5 # Optionnel ou utilise la v4 standard :
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
