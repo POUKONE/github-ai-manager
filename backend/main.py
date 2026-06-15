@@ -4,12 +4,16 @@ from datetime import datetime
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 
-# 1. Configuration propre du PATH au tout début
+# =====================================================================
+# 1. CONFIGURATION DYNAMIQUE DU PATH (Impérativement en premier !)
+# =====================================================================
 backend_dir = os.path.dirname(os.path.abspath(__file__))
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
 
-# 2. Imports locaux sécurisés
+# =====================================================================
+# 2. IMPORTS LOCAUX SÉCURISÉS (Une fois le PATH configuré)
+# =====================================================================
 from app.agents.security import SecurityAgent
 from app.core.github_client import GitHubClientManager
 from app.core.analyzer_tools import CodeStaticAnalyzer
@@ -84,13 +88,7 @@ def main():
             with open(test_file_path, "w", encoding="utf-8") as f:
                 f.write(generated_test_code)
             
-            # 🔄 Boucle de validation multi-agents
-            max_retries = 3
-            retry_count = 0
-            success = False
-            final_report = ""
-
-            # 🔄 Boucle de validation multi-agents (Logs épurés)
+            # 🔄 Boucle de validation multi-agents (Configuration propre)
             max_retries = 3
             retry_count = 0
             success = False
@@ -127,8 +125,6 @@ def main():
                         security_instructions = security_agent.analyze_vulnerabilities(bandit_report)
 
                     print(f"🤖 [Agents] L'Agent Coder génère une correction pour la tentative {retry_count + 1}...")
-                    
-            
                     
                     system_prompt_correction = (
                         "Tu es un Développeur Python Senior expert en Tests.\n"

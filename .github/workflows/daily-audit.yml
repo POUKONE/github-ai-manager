@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
     steps:
     # 1. Récupérer le code de ton projet GitHub AI Manager
     - name: Checkout Repository
@@ -24,18 +25,18 @@ jobs:
       with:
         python-version: '3.11'
 
-    # 3. Installer les dépendances du projet
+    # 3. Installer les dépendances du projet directement dans le répertoire backend
     - name: Install Dependencies
+      working-directory: backend
       run: |
-        cd backend
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
     # 4. Exécuter l'Orchestrateur IA avec tes variables secrètes
     - name: Run GitHub AI Manager
+      working-directory: backend
       env:
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        cd backend
         python main.py
