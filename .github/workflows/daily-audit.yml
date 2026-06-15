@@ -5,7 +5,6 @@ on:
     branches:
       - main
   schedule:
-    # S'exécute tous les jours à 2h00 du matin UTC
     - cron: '0 2 * * *'
 
 jobs:
@@ -15,28 +14,26 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
-    # 1. Récupérer le code de ton projet GitHub AI Manager
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Installer Python 3.11
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    # 3. Installer les dépendances du projet directement dans le répertoire backend
     - name: Install Dependencies
       working-directory: backend
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4. Exécuter l'Orchestrateur IA avec tes variables secrètes
+    # 🚀 ÉTAPE CORRIGÉE : Injection du PYTHONPATH
     - name: Run GitHub AI Manager
       working-directory: backend
       env:
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        PYTHONPATH: .  # 👈 Dit à Python de considérer le dossier 'backend' (dossier de travail) comme racine des modules
       run: |
         python main.py
