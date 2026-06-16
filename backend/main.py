@@ -1,19 +1,29 @@
 import sys
 import os
+
+# =====================================================================
+# 1. ANCRAGE DE LA RACINE DES MODULES (Fix absolu pour GitHub Actions)
+# =====================================================================
+# Détermine le chemin absolu du dossier contenant main.py (backend/)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# On force Python à regarder en priorité absolue dans 'backend/'
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+# Prise en charge de la racine globale si exécuté depuis l'extérieur
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(1, parent_dir)
+
+# =====================================================================
+# 2. IMPORTS DES DEPENDANCES ET AGENTS
+# =====================================================================
 from datetime import datetime
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 
-# =====================================================================
-# 1. CONFIGURATION DYNAMIQUE DU PATH (Impérativement en premier !)
-# =====================================================================
-backend_dir = os.path.dirname(os.path.abspath(__file__))
-if backend_dir not in sys.path:
-    sys.path.insert(0, backend_dir)
-
-# =====================================================================
-# 2. IMPORTS LOCAUX SÉCURISÉS (Une fois le PATH configuré)
-# =====================================================================
+# Imports locaux
 from app.agents.security import SecurityAgent
 from app.core.github_client import GitHubClientManager
 from app.core.analyzer_tools import CodeStaticAnalyzer
