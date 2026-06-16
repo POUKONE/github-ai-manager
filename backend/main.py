@@ -1,27 +1,43 @@
 import sys
 import os
 
-# =====================================================================
-# 1. ANCRAGE DE LA RACINE DES MODULES (Fix absolu pour GitHub Actions)
-# =====================================================================
-# Détermine le chemin absolu du dossier contenant main.py (backend/)
+# 1. Ancrage strict
 current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# On force Python à regarder en priorité absolue dans 'backend/'
 if current_dir not in sys.path:
     sys.path.insert(0, current_dir)
 
-# Prise en charge de la racine globale si exécuté depuis l'extérieur
-parent_dir = os.path.dirname(current_dir)
-if parent_dir not in sys.path:
-    sys.path.insert(1, parent_dir)
+# =====================================================================
+# DÉPANNAGE CRUCIAL : Affichage de l'arborescence réelle sur la CI
+# =====================================================================
+print("\n🔍 === DIAGNOSTIC DE L'ARBORESCENCE SUR GITHUB ACTIONS ===")
+print(f"Position actuelle de l'exécution : {os.getcwd()}")
+print(f"Contenu du dossier backend/ ({current_dir}) :")
+try:
+    for item in os.listdir(current_dir):
+        print(f"  - {item}")
+    
+    app_path = os.path.join(current_dir, "app")
+    if os.path.exists(app_path):
+        print(f"\nContenu du dossier app/ :")
+        for item in os.listdir(app_path):
+            print(f"  - {item}")
+            
+        agents_path = os.path.join(app_path, "agents")
+        if os.path.exists(agents_path):
+            print(f"\nContenu du dossier app/agents/ :")
+            for item in os.listdir(agents_path):
+                print(f"  - {item}")
+    else:
+        print("\n❌ ERREUR : Le dossier 'app' n'existe pas dans backend/")
+except Exception as e:
+    print(f"Impossible de lister les fichiers : {e}")
+print("=========================================================\n")
 
-# =====================================================================
-# 2. IMPORTS DES DEPENDANCES ET AGENTS
-# =====================================================================
+# 2. Imports standard
 from datetime import datetime
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
+
 
 # Imports locaux
 from app.agents.security import SecurityAgent
