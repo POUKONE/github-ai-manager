@@ -181,7 +181,7 @@ def main():
                     corrected_code = corrected_code.replace("```python", "").replace("```", "").strip()
 
                     # 🛡️ FIX INJECTION : Si l'IA omet l'import suite à sa correction, on l'injecte chirurgicalement
-                    fonction_cible = target_file_info['name']
+                    fonction_cible = target_file_info.get('name', 'gestion_score_complexe')
                     if f"from {module_name} import" not in corrected_code:
                         corrected_code = f"import pytest\nfrom {module_name} import {fonction_cible}\n\n" + corrected_code
                     
